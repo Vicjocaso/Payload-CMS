@@ -8,8 +8,17 @@ import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
 import { notFound } from 'next/navigation'
+import { safeStaticParams } from '@/utilities/safeStaticParams'
+import type { CardPostData } from '@/components/Card'
 
 export const revalidate = 600
+
+type PostsPageResult = {
+  docs: CardPostData[]
+  page?: number
+  totalDocs: number
+  totalPages: number
+}
 
 type Args = {
   params: Promise<{
@@ -19,19 +28,29 @@ type Args = {
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { pageNumber } = await paramsPromise
-  const payload = await getPayload({ config: configPromise })
-
   const sanitizedPageNumber = Number(pageNumber)
 
   if (!Number.isInteger(sanitizedPageNumber)) notFound()
 
-  const posts = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    limit: 12,
+  let posts: PostsPageResult = {
+    docs: [],
     page: sanitizedPageNumber,
-    overrideAccess: false,
-  })
+    totalDocs: 0,
+    totalPages: 0,
+  }
+
+  try {
+    const payload = await getPayload({ config: configPromise })
+    posts = await payload.find({
+      collection: 'posts',
+      depth: 1,
+      limit: 12,
+      page: sanitizedPageNumber,
+      overrideAccess: false,
+    }) as PostsPageResult
+  } catch (error) {
+    console.warn('[atelier] Could not load paginated posts.', error)
+  }
 
   return (
     <div className="pt-24 pb-24">
@@ -70,19 +89,20 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 }
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const { totalDocs } = await payload.count({
-    collection: 'posts',
-    overrideAccess: false,
+  return safeStaticParams(async () => {
+    const payload = await getPayload({ config: configPromise })
+    const { totalDocs } = await payload.count({
+      collection: 'posts',
+      overrideAccess: false,
+    })
+
+    const totalPages = Math.ceil(totalDocs / 10)
+    const pages: { pageNumber: string }[] = []
+
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push({ pageNumber: String(i) })
+    }
+
+    return pages
   })
-
-  const totalPages = Math.ceil(totalDocs / 10)
-
-  const pages: { pageNumber: string }[] = []
-
-  for (let i = 1; i <= totalPages; i++) {
-    pages.push({ pageNumber: String(i) })
-  }
-
-  return pages
 }

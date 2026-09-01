@@ -7,25 +7,49 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
+import type { CardPostData } from '@/components/Card'
 
-export const dynamic = 'force-static'
 export const revalidate = 600
 
-export default async function Page() {
-  const payload = await getPayload({ config: configPromise })
+type PostsPageResult = {
+  docs: CardPostData[]
+  page?: number
+  totalDocs: number
+  totalPages: number
+}
 
-  const posts = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    limit: 12,
-    overrideAccess: false,
-    select: {
-      title: true,
-      slug: true,
-      categories: true,
-      meta: true,
-    },
-  })
+export default async function Page() {
+  let posts: PostsPageResult = {
+    docs: [],
+    page: 1,
+    totalDocs: 0,
+    totalPages: 0,
+  }
+
+  try {
+    const payload = await getPayload({ config: configPromise })
+
+    const result = await payload.find({
+      collection: 'posts',
+      depth: 1,
+      limit: 12,
+      overrideAccess: false,
+      select: {
+        title: true,
+        slug: true,
+        categories: true,
+        meta: true,
+      },
+    })
+    posts = {
+      docs: result.docs as CardPostData[],
+      page: result.page,
+      totalDocs: result.totalDocs,
+      totalPages: result.totalPages,
+    }
+  } catch (error) {
+    console.warn('[atelier] Could not load posts archive.', error)
+  }
 
   return (
     <div className="pt-24 pb-24">
