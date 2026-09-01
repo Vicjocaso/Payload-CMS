@@ -1,5 +1,12 @@
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
+
+import { migrations } from './migrations'
+
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
 
 const isPostgresUrl = (url: string | undefined): url is string => {
   if (!url) return false
@@ -24,28 +31,38 @@ export const getPostgresConnectionString = (): string | undefined => {
 
 export const hasPostgresDatabase = (): boolean => Boolean(getPostgresConnectionString())
 
+const postgresAdapterOptions = (connectionString?: string) => ({
+  // Neon cannot CREATE DATABASE from the connection user.
+  disableCreateDatabase: true,
+  migrationDir: path.resolve(dirname, 'migrations'),
+  // Drizzle push is skipped when NODE_ENV=production. These SQL migrations
+  // run on first Payload init so /admin works against an empty Neon database.
+  prodMigrations: migrations,
+  push: false,
+  ...(connectionString
+    ? {
+        pool: {
+          connectionString,
+        },
+      }
+    : {}),
+})
+
 export const getDatabaseAdapter = () => {
   const connectionString = getPostgresConnectionString()
 
   if (connectionString) {
-    // @vercel/postgres looks up POSTGRES_URL internally.
     if (!process.env.POSTGRES_URL) {
       process.env.POSTGRES_URL = connectionString
     }
 
-    return vercelPostgresAdapter({
-      pool: { connectionString },
-      // No committed migrations yet — create tables on first connect so
-      // Vercel builds and /admin work against an empty Neon database.
-      push: true,
-    })
+    return vercelPostgresAdapter(postgresAdapterOptions(connectionString))
   }
 
-  if (process.env.VERCEL) {
-    // Never fall back to SQLite on Vercel: the serverless FS has no tables.
-    return vercelPostgresAdapter({
-      push: true,
-    })
+  // migrate:create uses a dummy POSTGRES_URL so the Postgres adapter is used
+  // even though the local app still runs on SQLite.
+  if (process.env.PAYLOAD_MIGRATING === 'true' || process.env.VERCEL) {
+    return vercelPostgresAdapter(postgresAdapterOptions(process.env.POSTGRES_URL))
   }
 
   return sqliteAdapter({

@@ -71,6 +71,8 @@ Optional: `CRON_SECRET`, `PREVIEW_SECRET`.
 
 The adapter also accepts `DATABASE_URL`, `POSTGRES_PRISMA_URL`, `POSTGRES_URL_NON_POOLING`, or `DATABASE_URL_UNPOOLED` when they start with `postgres`. Prefer setting `POSTGRES_URL` so the value is unambiguous.
 
+If `/admin` shows a server error after deploy, open `/next/health` on the same host. It reports which env vars are present and the database error message, without printing secrets.
+
 Hobby/Pro both work. Without Postgres, CMS data will not persist on Vercel.
 
 ## Stack
