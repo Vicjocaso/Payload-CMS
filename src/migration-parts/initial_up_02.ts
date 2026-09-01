@@ -1,6 +1,9 @@
 import { sql } from '@payloadcms/db-vercel-postgres'
 
 export const statement = sql`
+  CREATE TYPE "public"."enum_payload_folders_folder_type" AS ENUM('media');
+  CREATE TYPE "public"."enum_header_nav_items_link_type" AS ENUM('reference', 'custom');
+  CREATE TYPE "public"."enum_footer_nav_items_link_type" AS ENUM('reference', 'custom');
   CREATE TABLE "pages_hero_links" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
