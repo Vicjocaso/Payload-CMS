@@ -40,22 +40,36 @@ Set `NEXT_PUBLIC_SERVER_URL` in `.env` to the same origin.
 
 | Variable | Purpose |
 | --- | --- |
-| `DATABASE_URL` | Local SQLite file, e.g. `file:./payload-demo.db` |
-| `POSTGRES_URL` | Vercel Postgres connection string (production) |
+| `DATABASE_URL` | Local SQLite file, e.g. `file:./payload-demo.db`. On Vercel, a `postgres://` value here is also accepted. |
+| `POSTGRES_URL` | Neon / Vercel Postgres connection string (required on Vercel) |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob token for media uploads |
 | `PAYLOAD_SECRET` | JWT encryption secret |
 | `NEXT_PUBLIC_SERVER_URL` | Public origin, no trailing slash |
 | `CRON_SECRET` | Optional, for scheduled jobs |
 | `PREVIEW_SECRET` | Draft preview |
 
-Local development uses SQLite. On Vercel, set `POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN` from **Storage**.
+Local development uses SQLite. On Vercel, set `POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN`. Mark them available at **Build** as well as Runtime.
 
 ## Deploy on Vercel
 
-1. Import this repo into the Qualgen US team (or connect the Cursor Origin git remote).
-2. In the project: **Storage → Create Database → Postgres**, then **Storage → Create → Blob**.
-3. Settings → Environment Variables: set `PAYLOAD_SECRET` to a long random string, and `NEXT_PUBLIC_SERVER_URL` to `https://<your-project>.vercel.app` (no trailing slash). Vercel fills `POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN` when you connect those stores.
-4. Redeploy. Open `/admin`, create the first user, then seed demo content.
+1. Import `Vicjocaso/Payload-CMS` into your Vercel account.
+2. Create Neon (serverless Postgres) and Vercel Blob, then add the env vars below to **Production** and **Preview**.
+3. Redeploy. Open `/admin`, create the first user, then click **Seed your database**.
+
+### Env vars to paste in Vercel
+
+Add these under **Settings → Environment Variables**. Enable each for Production, Preview, and Build.
+
+| Name | Value |
+| --- | --- |
+| `POSTGRES_URL` | Neon connection string (`postgres://…` or `postgresql://…`). If Neon only gave you `DATABASE_URL`, copy that same URL into `POSTGRES_URL`. |
+| `BLOB_READ_WRITE_TOKEN` | Token from the Vercel Blob store |
+| `PAYLOAD_SECRET` | A long random string (not `local-dev-secret`) |
+| `NEXT_PUBLIC_SERVER_URL` | `https://<your-project>.vercel.app` with no trailing slash |
+
+Optional: `CRON_SECRET`, `PREVIEW_SECRET`.
+
+The adapter also accepts `DATABASE_URL`, `POSTGRES_PRISMA_URL`, `POSTGRES_URL_NON_POOLING`, or `DATABASE_URL_UNPOOLED` when they start with `postgres`. Prefer setting `POSTGRES_URL` so the value is unambiguous.
 
 Hobby/Pro both work. Without Postgres, CMS data will not persist on Vercel.
 

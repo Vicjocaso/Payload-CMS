@@ -13,51 +13,68 @@ type Args = {
     q: string
   }>
 }
+
+type SearchResult = {
+  docs: CardPostData[]
+  totalDocs: number
+}
+
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
   const { q: query } = await searchParamsPromise
-  const payload = await getPayload({ config: configPromise })
 
-  const posts = await payload.find({
-    collection: 'search',
-    depth: 1,
-    limit: 12,
-    select: {
-      title: true,
-      slug: true,
-      categories: true,
-      meta: true,
-    },
-    // pagination: false reduces overhead if you don't need totalDocs
-    pagination: false,
-    ...(query
-      ? {
-          where: {
-            or: [
-              {
-                title: {
-                  like: query,
+  let posts: SearchResult = { docs: [], totalDocs: 0 }
+
+  try {
+    const payload = await getPayload({ config: configPromise })
+
+    const result = await payload.find({
+      collection: 'search',
+      depth: 1,
+      limit: 12,
+      select: {
+        title: true,
+        slug: true,
+        categories: true,
+        meta: true,
+      },
+      // pagination: false reduces overhead if you don't need totalDocs
+      pagination: false,
+      ...(query
+        ? {
+            where: {
+              or: [
+                {
+                  title: {
+                    like: query,
+                  },
                 },
-              },
-              {
-                'meta.description': {
-                  like: query,
+                {
+                  'meta.description': {
+                    like: query,
+                  },
                 },
-              },
-              {
-                'meta.title': {
-                  like: query,
+                {
+                  'meta.title': {
+                    like: query,
+                  },
                 },
-              },
-              {
-                slug: {
-                  like: query,
+                {
+                  slug: {
+                    like: query,
+                  },
                 },
-              },
-            ],
-          },
-        }
-      : {}),
-  })
+              ],
+            },
+          }
+        : {}),
+    })
+    posts = {
+      docs: result.docs as CardPostData[],
+      totalDocs: result.totalDocs,
+    }
+  } catch (error) {
+    console.warn('[atelier] Could not run search.', error)
+  }
 
   return (
     <div className="pt-24 pb-24">
@@ -73,7 +90,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       </div>
 
       {posts.totalDocs > 0 ? (
-        <CollectionArchive posts={posts.docs as CardPostData[]} />
+        <CollectionArchive posts={posts.docs} />
       ) : (
         <div className="container">No results found.</div>
       )}
