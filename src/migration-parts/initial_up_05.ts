@@ -1,0 +1,102 @@
+import { sql } from '@payloadcms/db-vercel-postgres'
+
+export const statement = sql`
+  CREATE TABLE "_posts_v_version_populated_authors" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"_uuid" varchar,
+  	"name" varchar
+  );
+  
+  CREATE TABLE "_posts_v" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"parent_id" integer,
+  	"version_title" varchar,
+  	"version_hero_image_id" integer,
+  	"version_content" jsonb,
+  	"version_meta_title" varchar,
+  	"version_meta_image_id" integer,
+  	"version_meta_description" varchar,
+  	"version_published_at" timestamp(3) with time zone,
+  	"version_generate_slug" boolean DEFAULT true,
+  	"version_slug" varchar,
+  	"version_updated_at" timestamp(3) with time zone,
+  	"version_created_at" timestamp(3) with time zone,
+  	"version__status" "enum__posts_v_version_status" DEFAULT 'draft',
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"latest" boolean,
+  	"autosave" boolean
+  );
+  
+  CREATE TABLE "_posts_v_rels" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"order" integer,
+  	"parent_id" integer NOT NULL,
+  	"path" varchar NOT NULL,
+  	"posts_id" integer,
+  	"categories_id" integer,
+  	"users_id" integer
+  );
+  
+  CREATE TABLE "media" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"alt" varchar,
+  	"caption" jsonb,
+  	"folder_id" integer,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"url" varchar,
+  	"thumbnail_u_r_l" varchar,
+  	"filename" varchar,
+  	"mime_type" varchar,
+  	"filesize" numeric,
+  	"width" numeric,
+  	"height" numeric,
+  	"focal_x" numeric,
+  	"focal_y" numeric,
+  	"sizes_thumbnail_url" varchar,
+  	"sizes_thumbnail_width" numeric,
+  	"sizes_thumbnail_height" numeric,
+  	"sizes_thumbnail_mime_type" varchar,
+  	"sizes_thumbnail_filesize" numeric,
+  	"sizes_thumbnail_filename" varchar,
+  	"sizes_square_url" varchar,
+  	"sizes_square_width" numeric,
+  	"sizes_square_height" numeric,
+  	"sizes_square_mime_type" varchar,
+  	"sizes_square_filesize" numeric,
+  	"sizes_square_filename" varchar,
+  	"sizes_small_url" varchar,
+  	"sizes_small_width" numeric,
+  	"sizes_small_height" numeric,
+  	"sizes_small_mime_type" varchar,
+  	"sizes_small_filesize" numeric,
+  	"sizes_small_filename" varchar,
+  	"sizes_medium_url" varchar,
+  	"sizes_medium_width" numeric,
+  	"sizes_medium_height" numeric,
+  	"sizes_medium_mime_type" varchar,
+  	"sizes_medium_filesize" numeric,
+  	"sizes_medium_filename" varchar,
+  	"sizes_large_url" varchar,
+  	"sizes_large_width" numeric,
+  	"sizes_large_height" numeric,
+  	"sizes_large_mime_type" varchar,
+  	"sizes_large_filesize" numeric,
+  	"sizes_large_filename" varchar,
+  	"sizes_xlarge_url" varchar,
+  	"sizes_xlarge_width" numeric,
+  	"sizes_xlarge_height" numeric,
+  	"sizes_xlarge_mime_type" varchar,
+  	"sizes_xlarge_filesize" numeric,
+  	"sizes_xlarge_filename" varchar,
+  	"sizes_og_url" varchar,
+  	"sizes_og_width" numeric,
+  	"sizes_og_height" numeric,
+  	"sizes_og_mime_type" varchar,
+  	"sizes_og_filesize" numeric,
+  	"sizes_og_filename" varchar
+  );
+`
