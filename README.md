@@ -48,7 +48,15 @@ Set `NEXT_PUBLIC_SERVER_URL` in `.env` to the same origin.
 | `CRON_SECRET` | Optional, for scheduled jobs |
 | `PREVIEW_SECRET` | Draft preview |
 
-Local development uses SQLite. On Vercel, set `POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN`. Mark them available at **Build** as well as Runtime.
+Local development uses SQLite unless `POSTGRES_URL` is set, in which case it uses Neon. On Vercel, set `POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN` for Production, Preview, and Build.
+
+Paste `BLOB_READ_WRITE_TOKEN` **without quotes**. A quoted value (`"vercel_blob_rw_…"`) makes `/admin` fail to boot, so tables never get created.
+
+Create tables with:
+
+```bash
+pnpm payload migrate
+```
 
 ## Deploy on Vercel
 

@@ -1,11 +1,13 @@
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { getBlobReadWriteToken } from '@/database'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
 const envFlag = (name: string) => {
-  const value = process.env[name]
+  const raw = process.env[name]
+  const value = raw?.trim().replace(/^['"]|['"]$/g, '')
   if (!value) return { present: false as const, kind: 'missing' as const }
   if (value.startsWith('postgres://') || value.startsWith('postgresql://')) {
     return { present: true as const, kind: 'postgres' as const }
@@ -17,13 +19,20 @@ const envFlag = (name: string) => {
 }
 
 export async function GET() {
+  const rawBlob = process.env.BLOB_READ_WRITE_TOKEN
+  const blobToken = getBlobReadWriteToken()
+
   const env = {
     POSTGRES_URL: envFlag('POSTGRES_URL'),
     DATABASE_URL: envFlag('DATABASE_URL'),
     POSTGRES_PRISMA_URL: envFlag('POSTGRES_PRISMA_URL'),
     POSTGRES_URL_NON_POOLING: envFlag('POSTGRES_URL_NON_POOLING'),
     DATABASE_URL_UNPOOLED: envFlag('DATABASE_URL_UNPOOLED'),
-    BLOB_READ_WRITE_TOKEN: { present: Boolean(process.env.BLOB_READ_WRITE_TOKEN) },
+    BLOB_READ_WRITE_TOKEN: {
+      present: Boolean(rawBlob),
+      valid: Boolean(blobToken),
+      quoted: Boolean(rawBlob && (rawBlob.trim().startsWith('"') || rawBlob.trim().startsWith("'"))),
+    },
     PAYLOAD_SECRET: { present: Boolean(process.env.PAYLOAD_SECRET) },
     NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL || null,
   }

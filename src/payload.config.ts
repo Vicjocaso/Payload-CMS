@@ -13,10 +13,17 @@ import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
-import { getAllowedOrigins, getDatabaseAdapter } from './database'
+import {
+  getAllowedOrigins,
+  getBlobReadWriteToken,
+  getDatabaseAdapter,
+  normalizePublicServerUrl,
+} from './database'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+normalizePublicServerUrl()
+const blobToken = getBlobReadWriteToken()
 
 export default buildConfig({
   admin: {
@@ -68,11 +75,11 @@ export default buildConfig({
   plugins: [
     ...plugins,
     vercelBlobStorage({
-      enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+      enabled: Boolean(blobToken),
       collections: {
         media: true,
       },
-      token: process.env.BLOB_READ_WRITE_TOKEN || '',
+      token: blobToken || '',
       clientUploads: true,
     }),
   ],
