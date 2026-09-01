@@ -37,12 +37,11 @@ const normalizePostgresUrl = (url: string): string => {
 }
 
 export const getBlobReadWriteToken = (): string | undefined => {
-  const token = stripEnvValue(process.env.BLOB_READ_WRITE_TOKEN)
+  const token = stripEnvValue(process.env.BLOB_READ_WRITE_TOKEN)?.replace(/\s/g, '')
   if (!token) return undefined
-  if (!/^vercel_blob_rw_[A-Za-z0-9]+_[A-Za-z0-9]+$/.test(token)) {
-    return undefined
-  }
-  return token
+  // Extract the token if Vercel stored quotes, an assignment prefix, or other wrapping junk.
+  const match = token.match(/vercel_blob_rw_[A-Za-z0-9]+_[A-Za-z0-9]+/)
+  return match?.[0]
 }
 
 /** Vercel env values sometimes include a trailing slash; Payload CORS/URLs should not. */

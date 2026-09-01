@@ -32,6 +32,8 @@ export async function GET() {
       present: Boolean(rawBlob),
       valid: Boolean(blobToken),
       quoted: Boolean(rawBlob && (rawBlob.trim().startsWith('"') || rawBlob.trim().startsWith("'"))),
+      length: rawBlob?.trim().length ?? 0,
+      hasPrefix: Boolean(rawBlob?.includes('vercel_blob_rw_')),
     },
     PAYLOAD_SECRET: { present: Boolean(process.env.PAYLOAD_SECRET) },
     NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL || null,
