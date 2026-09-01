@@ -6,540 +6,125 @@
  * and re-run `payload generate:types` to regenerate this file.
  */
 
-/**
- * Supported timezones in IANA format.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "supportedTimezones".
- */
 import type { ArchiveBlock, Form, FormBlock, FormSubmission, MediaBlock, PayloadJob, PayloadKv, PayloadLockedDocument, PayloadMigration, PayloadPreference, Redirect, Search } from './payload-types-b'
 import type { CategoriesSelect, CollectionsWidget, Footer, FooterSelect, FormSubmissionsSelect, FormsSelect, Header, HeaderSelect, MediaSelect, PagesSelect, PayloadFoldersSelect, PayloadJobsSelect, PayloadKvSelect, PayloadLockedDocumentsSelect, PayloadMigrationsSelect, PayloadPreferencesSelect, PostsSelect, RedirectsSelect, SearchSelect, TaskSchedulePublish, UsersSelect } from './payload-types-c'
+
 export type SupportedTimezones =
-  | 'Pacific/Midway'
-  | 'Pacific/Niue'
-  | 'Pacific/Honolulu'
-  | 'Pacific/Rarotonga'
-  | 'America/Anchorage'
-  | 'Pacific/Gambier'
-  | 'America/Los_Angeles'
-  | 'America/Tijuana'
-  | 'America/Denver'
-  | 'America/Phoenix'
-  | 'America/Chicago'
-  | 'America/Guatemala'
-  | 'America/New_York'
-  | 'America/Bogota'
-  | 'America/Caracas'
-  | 'America/Santiago'
-  | 'America/Buenos_Aires'
-  | 'America/Sao_Paulo'
-  | 'Atlantic/South_Georgia'
-  | 'Atlantic/Azores'
-  | 'Atlantic/Cape_Verde'
-  | 'Europe/London'
-  | 'Europe/Berlin'
-  | 'Africa/Lagos'
-  | 'Europe/Athens'
-  | 'Africa/Cairo'
-  | 'Europe/Moscow'
-  | 'Asia/Riyadh'
-  | 'Asia/Dubai'
-  | 'Asia/Baku'
-  | 'Asia/Karachi'
-  | 'Asia/Tashkent'
-  | 'Asia/Calcutta'
-  | 'Asia/Dhaka'
-  | 'Asia/Almaty'
-  | 'Asia/Jakarta'
-  | 'Asia/Bangkok'
-  | 'Asia/Shanghai'
-  | 'Asia/Singapore'
-  | 'Asia/Tokyo'
-  | 'Asia/Seoul'
-  | 'Australia/Brisbane'
-  | 'Australia/Sydney'
-  | 'Pacific/Guam'
-  | 'Pacific/Noumea'
-  | 'Pacific/Auckland'
-  | 'Pacific/Fiji';
+  | 'Pacific/Midway' | 'Pacific/Niue' | 'Pacific/Honolulu' | 'Pacific/Rarotonga'
+  | 'America/Anchorage' | 'Pacific/Gambier' | 'America/Los_Angeles' | 'America/Tijuana'
+  | 'America/Denver' | 'America/Phoenix' | 'America/Chicago' | 'America/Guatemala'
+  | 'America/New_York' | 'America/Bogota' | 'America/Caracas' | 'America/Santiago'
+  | 'America/Buenos_Aires' | 'America/Sao_Paulo' | 'Atlantic/South_Georgia'
+  | 'Atlantic/Azores' | 'Atlantic/Cape_Verde' | 'Europe/London' | 'Europe/Berlin'
+  | 'Africa/Lagos' | 'Europe/Athens' | 'Africa/Cairo' | 'Europe/Moscow'
+  | 'Asia/Riyadh' | 'Asia/Dubai' | 'Asia/Baku' | 'Asia/Karachi' | 'Asia/Tashkent'
+  | 'Asia/Calcutta' | 'Asia/Dhaka' | 'Asia/Almaty' | 'Asia/Jakarta' | 'Asia/Bangkok'
+  | 'Asia/Shanghai' | 'Asia/Singapore' | 'Asia/Tokyo' | 'Asia/Seoul'
+  | 'Australia/Brisbane' | 'Australia/Sydney' | 'Pacific/Guam' | 'Pacific/Noumea'
+  | 'Pacific/Auckland' | 'Pacific/Fiji';
 
 export interface Config {
-  auth: {
-    users: UserAuthOperations;
-  };
+  auth: { users: UserAuthOperations };
   blocks: {};
   collections: {
-    pages: Page;
-    posts: Post;
-    media: Media;
-    categories: Category;
-    users: User;
-    redirects: Redirect;
-    forms: Form;
-    'form-submissions': FormSubmission;
-    search: Search;
-    'payload-kv': PayloadKv;
-    'payload-jobs': PayloadJob;
-    'payload-folders': FolderInterface;
-    'payload-locked-documents': PayloadLockedDocument;
-    'payload-preferences': PayloadPreference;
+    pages: Page; posts: Post; media: Media; categories: Category; users: User;
+    redirects: Redirect; forms: Form; 'form-submissions': FormSubmission; search: Search;
+    'payload-kv': PayloadKv; 'payload-jobs': PayloadJob; 'payload-folders': FolderInterface;
+    'payload-locked-documents': PayloadLockedDocument; 'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {
-    'payload-folders': {
-      documentsAndFolders: 'payload-folders' | 'media';
-    };
-  };
+  collectionsJoins: { 'payload-folders': { documentsAndFolders: 'payload-folders' | 'media' } };
   collectionsSelect: {
-    pages: PagesSelect\u003cfalse\u003e | PagesSelect\u003ctrue\u003e;
-    posts: PostsSelect\u003cfalse\u003e | PostsSelect\u003ctrue\u003e;
-    media: MediaSelect\u003cfalse\u003e | MediaSelect\u003ctrue\u003e;
-    categories: CategoriesSelect\u003cfalse\u003e | CategoriesSelect\u003ctrue\u003e;
-    users: UsersSelect\u003cfalse\u003e | UsersSelect\u003ctrue\u003e;
-    redirects: RedirectsSelect\u003cfalse\u003e | RedirectsSelect\u003ctrue\u003e;
-    forms: FormsSelect\u003cfalse\u003e | FormsSelect\u003ctrue\u003e;
-    'form-submissions': FormSubmissionsSelect\u003cfalse\u003e | FormSubmissionsSelect\u003ctrue\u003e;
-    search: SearchSelect\u003cfalse\u003e | SearchSelect\u003ctrue\u003e;
-    'payload-kv': PayloadKvSelect\u003cfalse\u003e | PayloadKvSelect\u003ctrue\u003e;
-    'payload-jobs': PayloadJobsSelect\u003cfalse\u003e | PayloadJobsSelect\u003ctrue\u003e;
-    'payload-folders': PayloadFoldersSelect\u003cfalse\u003e | PayloadFoldersSelect\u003ctrue\u003e;
-    'payload-locked-documents': PayloadLockedDocumentsSelect\u003cfalse\u003e | PayloadLockedDocumentsSelect\u003ctrue\u003e;
-    'payload-preferences': PayloadPreferencesSelect\u003cfalse\u003e | PayloadPreferencesSelect\u003ctrue\u003e;
-    'payload-migrations': PayloadMigrationsSelect\u003cfalse\u003e | PayloadMigrationsSelect\u003ctrue\u003e;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
+    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
+    forms: FormsSelect<false> | FormsSelect<true>;
+    'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
+    search: SearchSelect<false> | SearchSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
+    'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
+    'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
+    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
+    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
-  db: {
-    defaultIDType: number;
-  };
+  db: { defaultIDType: number };
   fallbackLocale: null;
-  globals: {
-    header: Header;
-    footer: Footer;
-  };
-  globalsSelect: {
-    header: HeaderSelect\u003cfalse\u003e | HeaderSelect\u003ctrue\u003e;
-    footer: FooterSelect\u003cfalse\u003e | FooterSelect\u003ctrue\u003e;
-  };
+  globals: { header: Header; footer: Footer };
+  globalsSelect: { header: HeaderSelect<false> | HeaderSelect<true>; footer: FooterSelect<false> | FooterSelect<true> };
   locale: null;
-  widgets: {
-    collections: CollectionsWidget;
-  };
+  widgets: { collections: CollectionsWidget };
   user: User;
-  jobs: {
-    tasks: {
-      schedulePublish: TaskSchedulePublish;
-      inline: {
-        input: unknown;
-        output: unknown;
-      };
-    };
-    workflows: unknown;
-  };
+  jobs: { tasks: { schedulePublish: TaskSchedulePublish; inline: { input: unknown; output: unknown } }; workflows: unknown };
 }
 export interface UserAuthOperations {
-  forgotPassword: {
-    email: string;
-    password: string;
-  };
-  login: {
-    email: string;
-    password: string;
-  };
-  registerFirstUser: {
-    email: string;
-    password: string;
-  };
-  unlock: {
-    email: string;
-    password: string;
-  };
+  forgotPassword: { email: string; password: string };
+  login: { email: string; password: string };
+  registerFirstUser: { email: string; password: string };
+  unlock: { email: string; password: string };
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pages".
- */
 export interface Page {
-  id: number;
-  title: string;
+  id: number; title: string;
   hero: {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
-    richText?: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    } | null;
-    links?:
-      | {
-          link: {
-            type?: ('reference' | 'custom') | null;
-            newTab?: boolean | null;
-            reference?:
-              | ({
-                  relationTo: 'pages';
-                  value: number | Page;
-                } | null)
-              | ({
-                  relationTo: 'posts';
-                  value: number | Post;
-                } | null);
-            url?: string | null;
-            label: string;
-            /**
-             * Choose how the link should be rendered.
-             */
-            appearance?: ('default' | 'outline') | null;
-          };
-          id?: string | null;
-        }[]
-      | null;
+    richText?: { root: { type: string; children: { type: any; version: number; [k: string]: unknown }[]; direction: ('ltr' | 'rtl') | null; format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''; indent: number; version: number }; [k: string]: unknown } | null;
+    links?: { link: { type?: ('reference' | 'custom') | null; newTab?: boolean | null; reference?: ({ relationTo: 'pages'; value: number | Page } | null) | ({ relationTo: 'posts'; value: number | Post } | null); url?: string | null; label: string; appearance?: ('default' | 'outline') | null }; id?: string | null }[] | null;
     media?: (number | null) | Media;
   };
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is \u003c500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+  meta?: { title?: string | null; image?: (number | null) | Media; description?: string | null };
+  publishedAt?: string | null; generateSlug?: boolean | null; slug: string; updatedAt: string; createdAt: string; _status?: ('draft' | 'published') | null;
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
 export interface Post {
-  id: number;
-  title: string;
-  heroImage?: (number | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is \u003c500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+  id: number; title: string; heroImage?: (number | null) | Media;
+  content: { root: { type: string; children: { type: any; version: number; [k: string]: unknown }[]; direction: ('ltr' | 'rtl') | null; format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''; indent: number; version: number }; [k: string]: unknown };
+  relatedPosts?: (number | Post)[] | null; categories?: (number | Category)[] | null;
+  meta?: { title?: string | null; image?: (number | null) | Media; description?: string | null };
+  publishedAt?: string | null; authors?: (number | User)[] | null;
+  populatedAuthors?: { id?: string | null; name?: string | null }[] | null;
+  generateSlug?: boolean | null; slug: string; updatedAt: string; createdAt: string; _status?: ('draft' | 'published') | null;
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
 export interface Media {
-  id: number;
-  alt?: string | null;
-  caption?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
+  id: number; alt?: string | null;
+  caption?: { root: { type: string; children: { type: any; version: number; [k: string]: unknown }[]; direction: ('ltr' | 'rtl') | null; format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''; indent: number; version: number }; [k: string]: unknown } | null;
   folder?: (number | null) | FolderInterface;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
+  updatedAt: string; createdAt: string; url?: string | null; thumbnailURL?: string | null; filename?: string | null; mimeType?: string | null; filesize?: number | null; width?: number | null; height?: number | null; focalX?: number | null; focalY?: number | null;
   sizes?: {
-    thumbnail?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    square?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    small?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    medium?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    large?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    xlarge?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    og?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+    thumbnail?: { url?: string | null; width?: number | null; height?: number | null; mimeType?: string | null; filesize?: number | null; filename?: string | null };
+    square?: { url?: string | null; width?: number | null; height?: number | null; mimeType?: string | null; filesize?: number | null; filename?: string | null };
+    small?: { url?: string | null; width?: number | null; height?: number | null; mimeType?: string | null; filesize?: number | null; filename?: string | null };
+    medium?: { url?: string | null; width?: number | null; height?: number | null; mimeType?: string | null; filesize?: number | null; filename?: string | null };
+    large?: { url?: string | null; width?: number | null; height?: number | null; mimeType?: string | null; filesize?: number | null; filename?: string | null };
+    xlarge?: { url?: string | null; width?: number | null; height?: number | null; mimeType?: string | null; filesize?: number | null; filename?: string | null };
+    og?: { url?: string | null; width?: number | null; height?: number | null; mimeType?: string | null; filesize?: number | null; filename?: string | null };
   };
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-folders".
- */
 export interface FolderInterface {
-  id: number;
-  name: string;
-  folder?: (number | null) | FolderInterface;
-  documentsAndFolders?: {
-    docs?: (
-      | {
-          relationTo?: 'payload-folders';
-          value: number | FolderInterface;
-        }
-      | {
-          relationTo?: 'media';
-          value: number | Media;
-        }
-    )[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  folderType?: 'media'[] | null;
-  updatedAt: string;
-  createdAt: string;
+  id: number; name: string; folder?: (number | null) | FolderInterface;
+  documentsAndFolders?: { docs?: ({ relationTo?: 'payload-folders'; value: number | FolderInterface } | { relationTo?: 'media'; value: number | Media })[]; hasNextPage?: boolean; totalDocs?: number };
+  folderType?: 'media'[] | null; updatedAt: string; createdAt: string;
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
- */
 export interface Category {
-  id: number;
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
+  id: number; title: string; generateSlug?: boolean | null; slug: string; parent?: (number | null) | Category;
+  breadcrumbs?: { doc?: (number | null) | Category; url?: string | null; label?: string | null; id?: string | null }[] | null;
+  updatedAt: string; createdAt: string;
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
 export interface User {
-  id: number;
-  name?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
+  id: number; name?: string | null; updatedAt: string; createdAt: string; email: string;
+  resetPasswordToken?: string | null; resetPasswordExpiration?: string | null; salt?: string | null; hash?: string | null;
+  loginAttempts?: number | null; lockUntil?: string | null;
+  sessions?: { id: string; createdAt?: string | null; expiresAt: string }[] | null;
+  password?: string | null; collection: 'users';
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock".
- */
 export interface CallToActionBlock {
-  richText?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  links?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'cta';
+  richText?: { root: { type: string; children: { type: any; version: number; [k: string]: unknown }[]; direction: ('ltr' | 'rtl') | null; format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''; indent: number; version: number }; [k: string]: unknown } | null;
+  links?: { link: { type?: ('reference' | 'custom') | null; newTab?: boolean | null; reference?: ({ relationTo: 'pages'; value: number | Page } | null) | ({ relationTo: 'posts'; value: number | Post } | null); url?: string | null; label: string; appearance?: ('default' | 'outline') | null }; id?: string | null }[] | null;
+  id?: string | null; blockName?: string | null; blockType: 'cta';
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContentBlock".
- */
 export interface ContentBlock {
-  columns?:
-    | {
-        size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
-        richText?: {
-          root: {
-            type: string;
-            children: {
-              type: any;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
-          [k: string]: unknown;
-        } | null;
-        enableLink?: boolean | null;
-        link?: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'content';
+  columns?: { size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null; richText?: { root: { type: string; children: { type: any; version: number; [k: string]: unknown }[]; direction: ('ltr' | 'rtl') | null; format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''; indent: number; version: number }; [k: string]: unknown } | null; enableLink?: boolean | null; link?: { type?: ('reference' | 'custom') | null; newTab?: boolean | null; reference?: ({ relationTo: 'pages'; value: number | Page } | null) | ({ relationTo: 'posts'; value: number | Post } | null); url?: string | null; label: string; appearance?: ('default' | 'outline') | null }; id?: string | null }[] | null;
+  id?: string | null; blockName?: string | null; blockType: 'content';
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaBlock".
- */
