@@ -11,10 +11,20 @@ import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
 
 import { Page, Post } from '@/payload-types'
+import { DEFAULT_SITE_NAME } from '@/constants/site'
 import { getServerSideURL } from '@/utilities/getURL'
 
-const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | Atelier Wellness` : 'Atelier Wellness'
+const generateTitle: GenerateTitle<Post | Page> = async ({ doc, req }) => {
+  let siteName = DEFAULT_SITE_NAME
+
+  try {
+    const site = await req.payload.findGlobal({ slug: 'site', depth: 0 })
+    if (site?.siteName) siteName = site.siteName
+  } catch {
+    // keep default
+  }
+
+  return doc?.title ? `${doc.title} | ${siteName}` : siteName
 }
 
 const generateURL: GenerateURL<Post | Page> = ({ doc }) => {

@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
+
+import { DEFAULT_SITE_NAME } from '@/constants/site'
 import { getServerSideURL } from './getURL'
 
-const defaultOpenGraph: Metadata['openGraph'] = {
+const defaultOpenGraph = (siteName = DEFAULT_SITE_NAME): Metadata['openGraph'] => ({
   type: 'website',
   description: 'Advisory for hotel spa operations, openings, and leadership.',
   images: [
@@ -9,14 +11,19 @@ const defaultOpenGraph: Metadata['openGraph'] = {
       url: `${getServerSideURL()}/website-template-OG.webp`,
     },
   ],
-  siteName: 'Atelier Wellness',
-  title: 'Atelier Wellness',
-}
+  siteName,
+  title: siteName,
+})
 
-export const mergeOpenGraph = (og?: Metadata['openGraph']): Metadata['openGraph'] => {
+export const mergeOpenGraph = (
+  og?: Metadata['openGraph'],
+  siteName = DEFAULT_SITE_NAME,
+): Metadata['openGraph'] => {
+  const base = defaultOpenGraph(siteName)
+
   return {
-    ...defaultOpenGraph,
+    ...base,
     ...og,
-    images: og?.images ? og.images : defaultOpenGraph.images,
+    images: og?.images ? og.images : base?.images,
   }
 }
