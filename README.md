@@ -67,6 +67,8 @@ curl -X POST https://<your-site>/next/templates/seed-starters -H "Authorization:
 
 In `/admin`, open **Templates → Page Templates** to browse layouts, **Save as template** from any page, or **Create page from template** when starting a new page.
 
+Change the site name and logo (header/footer) under **Admin → Globals → Site Settings** — no code edit required.
+
 ## Deploy on Vercel
 
 1. Import `Vicjocaso/Payload-CMS` into your Vercel account.
