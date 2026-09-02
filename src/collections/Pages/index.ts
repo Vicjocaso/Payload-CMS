@@ -2,15 +2,12 @@ import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
-import { Archive } from '../../blocks/ArchiveBlock/config'
-import { CallToAction } from '../../blocks/CallToAction/config'
-import { Content } from '../../blocks/Content/config'
-import { FormBlock } from '../../blocks/Form/config'
-import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { pageLayoutBlocksField } from '@/fields/pageLayoutFields'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
-import { generatePreviewPath } from '../../utilities/generatePreviewPath'
+import { generatePreviewPath } from '@/utilities/generatePreviewPath'
+import { applyTemplateOnCreate } from './hooks/applyTemplateOnCreate'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
 
 import {
@@ -53,12 +50,37 @@ export const Pages: CollectionConfig<'pages'> = {
         req,
       }),
     useAsTitle: 'title',
+    components: {
+      edit: {
+        beforeDocumentControls: ['@/components/admin/SavePageAsTemplate'],
+      },
+    },
   },
   fields: [
     {
       name: 'title',
       type: 'text',
       required: true,
+    },
+    {
+      name: 'sourceTemplate',
+      type: 'relationship',
+      relationTo: 'page-templates',
+      admin: {
+        position: 'sidebar',
+        description: 'Optional: apply a template layout when creating this page.',
+        condition: (_, __, { operation }) => operation === 'create',
+      },
+    },
+    {
+      name: 'applyTemplateFromQuery',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: '@/components/admin/ApplyTemplateFromQuery',
+        },
+        condition: (_, __, { operation }) => operation === 'create',
+      },
     },
     {
       type: 'tabs',
@@ -68,17 +90,7 @@ export const Pages: CollectionConfig<'pages'> = {
           label: 'Hero',
         },
         {
-          fields: [
-            {
-              name: 'layout',
-              type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
-              required: true,
-              admin: {
-                initCollapsed: true,
-              },
-            },
-          ],
+          fields: [pageLayoutBlocksField],
           label: 'Content',
         },
         {
@@ -99,10 +111,7 @@ export const Pages: CollectionConfig<'pages'> = {
 
             MetaDescriptionField({}),
             PreviewField({
-              // if the `generateUrl` function is configured
               hasGenerateFn: true,
-
-              // field paths to match the target field for data
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),
@@ -121,7 +130,7 @@ export const Pages: CollectionConfig<'pages'> = {
   ],
   hooks: {
     afterChange: [revalidatePage],
-    beforeChange: [populatePublishedAt],
+    beforeChange: [populatePublishedAt, applyTemplateOnCreate],
     afterDelete: [revalidateDelete],
   },
   versions: {
