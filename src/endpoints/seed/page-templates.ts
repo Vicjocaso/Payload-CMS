@@ -50,17 +50,18 @@ export const seedPageTemplates = async ({
       thumbnail: metaImage.id,
       layout: pickPageLayout(aboutPageData),
     },
+    ...(contactData
+      ? [
+          {
+            name: 'Contact — inquiry form',
+            description: 'Minimal hero with a contact form block.',
+            category: 'contact' as const,
+            thumbnail: metaImage.id,
+            layout: pickPageLayout(contactData),
+          },
+        ]
+      : []),
   ]
-
-  if (contactData) {
-    templates.push({
-      name: 'Contact — inquiry form',
-      description: 'Minimal hero with a contact form block.',
-      category: 'contact' as const,
-      thumbnail: metaImage.id,
-      layout: pickPageLayout(contactData),
-    })
-  }
 
   for (const template of templates) {
     await payload.create({
