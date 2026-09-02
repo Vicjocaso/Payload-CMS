@@ -1903,7 +1903,7 @@ export interface TaskSchedulePublish {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition" "BannerBlock".
+ * via the `definition` "BannerBlock".
  */
 export interface BannerBlock {
   style: 'info' | 'warning' | 'error' | 'success';
