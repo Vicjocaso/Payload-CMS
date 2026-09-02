@@ -31,7 +31,7 @@ Create the first user in `/admin`. On the dashboard, click **Seed your database*
 To match this environment’s preview port:
 
 ```bash
-pnpm dev -- --port 43127 --hostname 0.0.0.0
+pnpm exec next dev --port 43127 --hostname 0.0.0.0
 ```
 
 Set `NEXT_PUBLIC_SERVER_URL` in `.env` to the same origin.
@@ -50,13 +50,22 @@ Set `NEXT_PUBLIC_SERVER_URL` in `.env` to the same origin.
 
 Local development uses SQLite unless `POSTGRES_URL` is set, in which case it uses Neon. On Vercel, set `POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN` for Production, Preview, and Build.
 
-Paste `BLOB_READ_WRITE_TOKEN` **without quotes**. A quoted value (`"vercel_blob_rw_…"`) makes `/admin` fail to boot, so tables never get created.
+Paste `BLOB_READ_WRITE_TOKEN` **without quotes**. The app strips wrapping quotes, but media uploads still need a clean `vercel_blob_rw_<store>_<secret>` value.
 
 Create tables with:
 
 ```bash
 pnpm payload migrate
 ```
+
+After deploy, starter page templates can be added without re-seeding the whole site:
+
+```bash
+# while logged into /admin, or with a JWT from /api/users/login
+curl -X POST https://<your-site>/next/templates/seed-starters -H "Authorization: JWT <token>"
+```
+
+In `/admin`, open **Templates → Page Templates** to browse layouts, **Save as template** from any page, or **Create page from template** when starting a new page.
 
 ## Deploy on Vercel
 
