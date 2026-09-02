@@ -10,11 +10,13 @@ import { imageHero1 } from './image-hero-1'
 import { post1 } from './post-1'
 import { post2 } from './post-2'
 import { post3 } from './post-3'
+import { seedPageTemplates } from './page-templates'
 
 const collections: CollectionSlug[] = [
   'categories',
   'media',
   'pages',
+  'page-templates',
   'posts',
   'forms',
   'form-submissions',
@@ -220,6 +222,13 @@ export const seed = async ({
       data: aboutPageData,
     }),
   ])
+
+  await seedPageTemplates({
+    payload,
+    heroImage: imageHomeDoc,
+    metaImage: image2Doc,
+    contactFormId: contactForm.id,
+  })
 
   payload.logger.info(`— Seeding globals...`)
 
