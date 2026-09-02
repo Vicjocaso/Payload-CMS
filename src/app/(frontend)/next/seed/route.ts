@@ -1,4 +1,5 @@
 import { createLocalReq, getPayload } from 'payload'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { seed } from '@/endpoints/seed'
 import config from '@payload-config'
 import { headers } from 'next/headers'
@@ -22,6 +23,12 @@ export async function POST(): Promise<Response> {
     const payloadReq = await createLocalReq({ user }, payload)
 
     await seed({ payload, req: payloadReq })
+
+    revalidatePath('/', 'layout')
+    revalidatePath('/')
+    revalidatePath('/posts')
+    revalidateTag('pages-sitemap', 'max')
+    revalidateTag('posts-sitemap', 'max')
 
     return Response.json({ success: true })
   } catch (e) {
