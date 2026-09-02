@@ -13,7 +13,7 @@ export const ApplyTemplateFromQuery: React.FC = () => {
 
     const params = new URLSearchParams(window.location.search)
     const templateId = params.get('template')
-    if (!templateId) return
+    if (!templateId || templateId === 'null' || templateId === 'undefined') return
 
     appliedRef.current = true
 
