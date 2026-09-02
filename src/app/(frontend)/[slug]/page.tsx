@@ -14,6 +14,8 @@ import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { safeStaticParams } from '@/utilities/safeStaticParams'
 
+export const dynamic = 'force-dynamic'
+
 export async function generateStaticParams() {
   return safeStaticParams(async () => {
     const payload = await getPayload({ config: configPromise })
@@ -56,9 +58,16 @@ export default async function Page({ params: paramsPromise }: Args) {
     slug: decodedSlug,
   })
 
-  // Remove this code once your website is seeded
-  if (!page && slug === 'home') {
-    page = homeStatic
+  if (!page && decodedSlug === 'home') {
+    const payload = await getPayload({ config: configPromise })
+    const { totalDocs } = await payload.count({
+      collection: 'pages',
+      overrideAccess: true,
+    })
+
+    if (totalDocs === 0) {
+      page = homeStatic
+    }
   }
 
   if (!page) {

@@ -16,6 +16,8 @@ import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { safeStaticParams } from '@/utilities/safeStaticParams'
 
+export const dynamic = 'force-dynamic'
+
 export async function generateStaticParams() {
   return safeStaticParams(async () => {
     const payload = await getPayload({ config: configPromise })

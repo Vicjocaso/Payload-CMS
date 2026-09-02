@@ -11,7 +11,7 @@ import { notFound } from 'next/navigation'
 import { safeStaticParams } from '@/utilities/safeStaticParams'
 import type { CardPostData } from '@/components/Card'
 
-export const revalidate = 600
+export const dynamic = 'force-dynamic'
 
 type PostsPageResult = {
   docs: CardPostData[]

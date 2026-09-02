@@ -11,6 +11,7 @@ import { post1 } from './post-1'
 import { post2 } from './post-2'
 import { post3 } from './post-3'
 import { seedPageTemplates } from './page-templates'
+import { wipeCollection } from '@/utilities/wipeCollection'
 
 const collections: CollectionSlug[] = [
   'categories',
@@ -66,13 +67,7 @@ export const seed = async ({
   )
 
   await Promise.all(
-    collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
-  )
-
-  await Promise.all(
-    collections
-      .filter((collection) => Boolean(payload.collections[collection].config.versions))
-      .map((collection) => payload.db.deleteVersions({ collection, req, where: {} })),
+    collections.map((collection) => wipeCollection(payload, collection, req)),
   )
 
   payload.logger.info(`— Seeding demo author and user...`)
@@ -300,6 +295,27 @@ export const seed = async ({
       },
     }),
   ])
+
+  payload.logger.info('— Verifying seeded pages...')
+
+  const publishedPages = await payload.find({
+    collection: 'pages',
+    draft: false,
+    limit: 10,
+    overrideAccess: true,
+    pagination: false,
+    req,
+  })
+
+  if (publishedPages.totalDocs < 3) {
+    throw new Error(`Expected at least 3 published pages, found ${publishedPages.totalDocs}.`)
+  }
+
+  for (const page of publishedPages.docs) {
+    if (page.id == null) {
+      throw new Error(`Seeded page "${page.slug}" is missing an id.`)
+    }
+  }
 
   payload.logger.info('Seeded database successfully!')
 }
