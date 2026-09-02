@@ -112,10 +112,12 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
+    site: Site;
     header: Header;
     footer: Footer;
   };
   globalsSelect: {
+    site: SiteSelect<false> | SiteSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
   };
@@ -1737,6 +1739,23 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site".
+ */
+export interface Site {
+  id: number;
+  /**
+   * Shown in the header, footer, browser tab suffix, and social previews.
+   */
+  siteName: string;
+  /**
+   * Optional. Upload a logo image to replace the text name in the header and footer.
+   */
+  logo?: (number | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
  */
 export interface Header {
@@ -1792,6 +1811,17 @@ export interface Footer {
     | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site_select".
+ */
+export interface SiteSelect<T extends boolean = true> {
+  siteName?: T;
+  logo?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1873,7 +1903,7 @@ export interface TaskSchedulePublish {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock".
+ * via the `definition" "BannerBlock".
  */
 export interface BannerBlock {
   style: 'info' | 'warning' | 'error' | 'success';
