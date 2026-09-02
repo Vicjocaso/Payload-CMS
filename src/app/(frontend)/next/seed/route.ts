@@ -27,6 +27,7 @@ export async function POST(): Promise<Response> {
     revalidatePath('/', 'layout')
     revalidatePath('/')
     revalidatePath('/posts')
+    revalidateTag('global_site', 'max')
     revalidateTag('pages-sitemap', 'max')
     revalidateTag('posts-sitemap', 'max')
 
