@@ -27,7 +27,7 @@ const collections: CollectionSlug[] = [
   'payload-locked-documents',
 ]
 
-const globals: GlobalSlug[] = ['header', 'footer']
+const globals: GlobalSlug[] = ['site', 'header', 'footer']
 
 const categories = ['Wellness', 'Hospitality', 'Leadership', 'Operations']
 
@@ -51,20 +51,22 @@ export const seed = async ({
   payload.logger.info(`— Clearing collections and globals...`)
 
   // clear the database
-  await Promise.all(
-    globals.map((global) =>
+  await Promise.all([
+    payload.updateGlobal({
+      slug: 'site',
+      data: { siteName: 'Atelier Wellness' },
+      depth: 0,
+      context: { disableRevalidate: true },
+    }),
+    ...(['header', 'footer'] as const).map((slug) =>
       payload.updateGlobal({
-        slug: global,
-        data: {
-          navItems: [],
-        },
+        slug,
+        data: { navItems: [] },
         depth: 0,
-        context: {
-          disableRevalidate: true,
-        },
+        context: { disableRevalidate: true },
       }),
     ),
-  )
+  ])
 
   await Promise.all(
     collections.map((collection) => wipeCollection(payload, collection, req)),
@@ -231,6 +233,12 @@ export const seed = async ({
   payload.logger.info(`— Seeding globals...`)
 
   await Promise.all([
+    payload.updateGlobal({
+      slug: 'site',
+      data: {
+        siteName: 'Atelier Wellness',
+      },
+    }),
     payload.updateGlobal({
       slug: 'header',
       data: {
