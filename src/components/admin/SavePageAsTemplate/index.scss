@@ -1,0 +1,67 @@
+.savePageAsTemplate {
+  display: inline-flex;
+  margin-right: 0.5rem;
+}
+
+.savePageAsTemplate__modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.savePageAsTemplate__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.savePageAsTemplate__panel {
+  position: relative;
+  z-index: 1;
+  width: min(28rem, calc(100vw - 2rem));
+  padding: 1.25rem;
+  background: var(--theme-elevation-0);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.savePageAsTemplate__panel h3 {
+  margin: 0;
+}
+
+.savePageAsTemplate__panel p {
+  margin: 0;
+  color: var(--theme-elevation-600);
+  font-size: 0.9rem;
+}
+
+.savePageAsTemplate__panel label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+}
+
+.savePageAsTemplate__panel input,
+.savePageAsTemplate__panel textarea,
+.savePageAsTemplate__panel select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 4px;
+  background: var(--theme-elevation-50);
+  color: inherit;
+}
+
+.savePageAsTemplate__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
